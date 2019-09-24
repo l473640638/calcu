@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Hello</string>
+    <string name="tips">Input RMB</string>
+    <string name="b1">DOLLAR</string>
+    <string name="b2">EURO</string>
+    <string name="b3">WON</string>
+    <string name="b4">CONFIG</string>
+    <string name="b5">SAVE</string>
+    <string name="m1">$</string>
+    <string name="m2">€</string>
+    <string name="m3">₩</string>
+</resources>
