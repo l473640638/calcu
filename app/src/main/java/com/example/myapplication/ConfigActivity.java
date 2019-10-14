@@ -2,7 +2,9 @@ package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -32,6 +34,14 @@ public class ConfigActivity extends AppCompatActivity {
 protected void btn5(View v)
 {
     Bundle bdl = new Bundle();
+    /*
+    SharedPreferences sharedPreferences = getSharedPreferences("myrate", Activity.MODE_PRIVATE);
+    SharedPreferences.Editor editor = sharedPreferences.edit();
+    editor.putFloat("dollar_rate",Float.parseFloat(t1.getText().toString()));
+    editor.putFloat("euro_rate",Float.parseFloat(t2.getText().toString()));
+    editor.putFloat("won_rate",Float.parseFloat(t3.getText().toString()));
+    editor.apply();
+    */
     bdl.putFloat("key_dollar",Float.parseFloat(t1.getText().toString()));
     bdl.putFloat("key_euro",Float.parseFloat(t2.getText().toString()));
     bdl.putFloat("key_won",Float.parseFloat(t3.getText().toString()));
