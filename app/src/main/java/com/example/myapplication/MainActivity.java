@@ -23,18 +23,15 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity implements Runnable {
-    private float dollarRate = 0;
-    private float euroRate = 0;
-    private float wonRate = 0;
+    private float dollarRate = 0.1406f;
+    private float euroRate = 0.1276f;
+    private float wonRate = 167.8472f;
     Handler handler;
 
     @Override
@@ -42,17 +39,35 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-       /*
+
         SharedPreferences sharedPreferences = getSharedPreferences("myrate", Activity.MODE_PRIVATE);
-        dollarRate= sharedPreferences.getFloat("dollar_rate",0.0f);
+       /* dollarRate= sharedPreferences.getFloat("dollar_rate",0.0f);
         euroRate  = sharedPreferences.getFloat("euro_rate",0.0f);
         wonRate   = sharedPreferences.getFloat("won_rate",0.0f);
         */
 
         setContentView(R.layout.activity_main);
+        String updateDate = sharedPreferences.getString("update_date","");
 
-        Thread t = new Thread(this);
+//获取当前系统时间
+        Date today = Calendar.getInstance().getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        final String todayStr = sdf.format(today);
+       /* Thread t = new Thread(this);
         t.start();
+        */
+        Log.i("timeqqq", "onCreate: sp updateDate=" + updateDate);
+        Log.i("timeqqq", "onCreate: todayStr=" + todayStr);
+
+//判断时间
+        if(!todayStr.equals(updateDate)){
+            Log.i("timeqqq", "onCreate: 需要更新");
+            //开启子线程
+            Thread t = new Thread(this);
+            t.start();
+        }else{
+            Log.i("timeqqq", "onCreate: 不需要更新");
+        }
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -65,13 +80,13 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                     Log.i("dooo", "handleMessage: dollarRate:" + dollarRate);
                     Log.i("euuu", "handleMessage: euroRate:" + euroRate);
                     Log.i("wooo", "handleMessage: wonRate:" + wonRate);
-                   /* SharedPreferences sp = getSharedPreferences("myrate", Activity.MODE_PRIVATE);
+                    SharedPreferences sp = getSharedPreferences("myrate", Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putFloat("dollar_rate",dollarRate);
                     editor.putFloat("euro_rate",euroRate);
                     editor.putFloat("won_rate",wonRate);
-                    //editor.putString("update_date",todayStr);
-                    editor.apply();*/
+                    editor.putString("update_date",todayStr);
+                    editor.apply();
                     Toast.makeText(MainActivity.this, "汇率已更新", Toast.LENGTH_SHORT).show();
                 }
                 super.handleMessage(msg);
@@ -121,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         startActivityForResult(new Intent(MainActivity.this, ConfigActivity.class), 1);
         onActivityResult(1, RESULT_OK, config);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("myrate", Activity.MODE_PRIVATE);
+       SharedPreferences sharedPreferences = getSharedPreferences("myrate", Activity.MODE_PRIVATE);
         dollarRate = sharedPreferences.getFloat("dollar_rate", 0.0f);
         euroRate = sharedPreferences.getFloat("euro_rate", 0.0f);
         wonRate = sharedPreferences.getFloat("won_rate", 0.0f);
@@ -137,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_set) {
+        if (item.getItemId() == R.id.Drate) {
             openone();
         }
         return super.onOptionsItemSelected(item);
